@@ -25,4 +25,4 @@ def handler(event=None, context=None):
     chrome.get(url)
     time.sleep(random.uniform(int(event['low_sleep']), int(event['high_sleep'])))
 
-    return chrome.get_screenshot_as_base64()
+    return { 'statusCode': 200, 'body': { 'encoded_image': chrome.get_screenshot_as_base64() } }
