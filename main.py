@@ -1,6 +1,5 @@
 from selenium import webdriver
 from tempfile import mkdtemp
-from selenium.webdriver.common.by import By
 import random
 import time
 
@@ -13,7 +12,9 @@ def handler(event=None, context=None):
     options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-gpu")
-    options.add_argument(f"--window-size={event['x_pixels']}x{event['y_pixels']}")
+
+    options.add_argument("--window-size=632,824") # headless new is junk and resizes the y non-linearly -- hardcoding for 632 pixels
+    #options.add_argument(f"--window-size={event['x_pixels']}x{event['y_pixels']}")
     options.add_argument("--single-process")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-dev-tools")
@@ -24,8 +25,10 @@ def handler(event=None, context=None):
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument('--hide-scrollbars')
 
+
     chrome = webdriver.Chrome(options=options, service=service)
     chrome.get(url)
+
     time.sleep(random.uniform(int(event['low_sleep']), int(event['high_sleep'])))
 
     encoded_image = chrome.get_screenshot_as_base64()
