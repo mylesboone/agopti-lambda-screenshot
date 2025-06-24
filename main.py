@@ -7,8 +7,10 @@ import time
 def handler(event=None, context=None):
     url = event['url']
     options = webdriver.ChromeOptions()
+    service = webdriver.ChromeService("/opt/chromedriver")
+
     options.binary_location = '/opt/chrome/chrome'
-    options.add_argument('--headless')
+    options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
     options.add_argument("--disable-gpu")
     options.add_argument(f"--window-size={event['x_pixels']}x{event['y_pixels']}")
@@ -21,7 +23,8 @@ def handler(event=None, context=None):
     options.add_argument(f"--disk-cache-dir={mkdtemp()}")
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument('--hide-scrollbars')
-    chrome = webdriver.Chrome("/opt/chromedriver", options=options)
+
+    chrome = webdriver.Chrome(options=options, service=service)
     chrome.get(url)
     time.sleep(random.uniform(int(event['low_sleep']), int(event['high_sleep'])))
 
